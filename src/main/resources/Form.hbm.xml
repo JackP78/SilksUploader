@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="findRunnerForm">
+		<return alias="FormEntry" class="com.listowel.FormEntry" />
+	<![CDATA[select runner.runner_id from smartform.historic_runners runner where runner.runner_id=:runnerId]]>
+	</sql-query>
+</hibernate-mapping>

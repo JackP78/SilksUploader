@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="silks">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="body" minOccurs="0">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="colour" type="colortype"/>
+              <xs:element name="pattern" type="bodypatterntype"/>
+              <xs:element name="patterncolour" type="colortype"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="sleeve" minOccurs="0">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="colour" type="colortype"/>
+              <xs:element name="pattern" type="sleevepatterntype"/>
+              <xs:element name="patterncolour" type="colortype"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="cap" minOccurs="0">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="colour" type="colortype"/>
+              <xs:element name="pattern" type="cappatterntype"/>
+              <xs:element name="patterncolour" type="colortype"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="colortype" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="beige" />
+      <xs:enumeration value="black" />
+      <xs:enumeration value="brown" />
+      <xs:enumeration value="dark_blue" />
+      <xs:enumeration value="dark_green" />
+      <xs:enumeration value="emerald_green" />
+      <xs:enumeration value="grey" />
+      <xs:enumeration value="light_blue" />
+      <xs:enumeration value="light_green" />
+      <xs:enumeration value="green" />  <!--  alias for emerald green -->
+      <xs:enumeration value="maroon" />
+      <xs:enumeration value="mauve" />
+      <xs:enumeration value="orange" />
+      <xs:enumeration value="amber" /> <!--  alias for orange -->
+      <xs:enumeration value="pink" />
+      <xs:enumeration value="cyclamen" />
+      <xs:enumeration value="purple" />
+      <xs:enumeration value="red" />
+      <xs:enumeration value="royal_blue" />
+      <xs:enumeration value="white" />
+      <xs:enumeration value="yellow" />
+      <xs:enumeration value="gold" /> <!--  alias for yellow -->
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bodypatterntype" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="plain" />
+      <xs:enumeration value="seams" />
+      <xs:enumeration value="epaulets" />
+      <xs:enumeration value="epaulettes" /> <!-- alias for epaulets -->
+      <xs:enumeration value="stripe" />
+      <xs:enumeration value="panel" /> <!--  alias for stripe -->
+      <xs:enumeration value="braces" />
+      <xs:enumeration value="stripes" />
+      <xs:enumeration value="striped" /> <!--  alias for striped -->
+      <xs:enumeration value="hoops" />
+      <xs:enumeration value="hooped" />
+      <xs:enumeration value="hoop" />
+      <xs:enumeration value="quartered" />
+      <xs:enumeration value="cross_belts" />
+      <xs:enumeration value="cross_sashes" /> <!-- alias for cross belts -->
+      <xs:enumeration value="chevrons" />
+      <xs:enumeration value="chevron" />
+      <xs:enumeration value="check" />
+      <xs:enumeration value="diamonds" />
+      <xs:enumeration value="triple_diamond" />
+      <xs:enumeration value="diamond" />
+      <xs:enumeration value="large_spots" />
+      <xs:enumeration value="spots" />
+      <xs:enumeration value="stars" />
+      <xs:enumeration value="star" />
+      <xs:enumeration value="cross_of_lorraine" />
+      <xs:enumeration value="disc" />
+      <xs:enumeration value="inverted_triangle" />
+      <xs:enumeration value="diabolo" />
+      <xs:enumeration value="hollow_box" />
+	  <xs:enumeration value="sash" />
+	  <xs:enumeration value="halve" />
+	  <xs:enumeration value="halved" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sleevepatterntype" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="plain" />
+      <xs:enumeration value="armlet" />
+      <xs:enumeration value="hooped" />
+      <xs:enumeration value="hoops" />  <!-- alias for hoops -->
+      <xs:enumeration value="striped" />
+      <xs:enumeration value="chevrons" />
+      <xs:enumeration value="seams" />
+      <xs:enumeration value="stars" />
+      <xs:enumeration value="spots" />
+      <xs:enumeration value="halves" />
+      <xs:enumeration value="halved" /> <!-- alias for halves -->
+      <xs:enumeration value="diabolo" />
+      <xs:enumeration value="diamonds" />
+      <xs:enumeration value="check" />
+	  <xs:enumeration value="mismatched" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cappatterntype" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="plain" />
+      <xs:enumeration value="hooped" />
+      <xs:enumeration value="striped" />
+      <xs:enumeration value="check" />
+      <xs:enumeration value="spots" />
+      <xs:enumeration value="quartered" />
+      <xs:enumeration value="stars" />
+      <xs:enumeration value="star" />
+      <xs:enumeration value="diamonds" />
+      <xs:enumeration value="diamond" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
