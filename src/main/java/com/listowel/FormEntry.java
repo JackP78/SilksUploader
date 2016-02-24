@@ -8,11 +8,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 
-import org.parse4j.ParseClassName;
-import org.parse4j.ParseObject;
-
-@ParseClassName("Form")
-public class FormEntry extends ParseObject implements Serializable {
+public class FormEntry implements Serializable {
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://localhost/smartform";
@@ -137,7 +133,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setMeetingDate(Date meetingDate) {
 		this.meetingDate = meetingDate;
-		this.put("meetingdate", meetingDate);
+		//this.put("meetingdate", meetingDate);
 	}
 
 	@Column(name = "course")
@@ -147,7 +143,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setCourse(String course) {
 		this.course = course;
-		this.put("course", course);
+		//this.put("course", course);
 	}
 
 	@Column(name = "going")
@@ -157,9 +153,9 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setGoing(String going) {
 		this.going = going;
-		if (going != null) {
+		/*if (going != null) {
 			this.put("going", going);
-		}
+		}*/
 	}
 
 	@Column(name = "runner_id", unique = true, nullable = false)
@@ -178,7 +174,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setFinishPosition(int finishPosition) {
 		this.finishPosition = finishPosition;
-		this.put("finishposition", finishPosition);
+		//this.put("finishposition", finishPosition);
 	}
 
 	@Column(name = "winner")
@@ -188,7 +184,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setWinner(String winner) {
 		this.winner = winner;
-		this.put("winner", winner);
+		//this.put("winner", winner);
 	}
 
 	@Column(name = "starting_price", nullable = false)
@@ -198,7 +194,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setStartingPrice(String startingPrice) {
 		this.startingPrice = startingPrice;
-		this.put("startingprice", startingPrice);
+		//this.put("startingprice", startingPrice);
 	}
 
 	@Column(name = "starting_price_decimal", nullable = false)
@@ -208,7 +204,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setStartingPriceDecimal(double startingPriceDecimal) {
 		this.startingPriceDecimal = startingPriceDecimal;
-		this.put("startingpricedecimal", startingPriceDecimal);
+		//this.put("startingpricedecimal", startingPriceDecimal);
 	}
 
 	@Column(name = "distance_beaten", nullable = false)
@@ -218,7 +214,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setDistanceBeaten(int distanceBeaten) {
 		this.distanceBeaten = distanceBeaten;
-		this.put("distancebeaten", distanceBeaten);
+		//this.put("distancebeaten", distanceBeaten);
 	}
 
 	@Column(name = "distance_won", nullable = false)
@@ -228,7 +224,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setDistanceWon(int distanceWon) {
 		this.distanceWon = distanceWon;
-		this.put("distancewon", distanceWon);
+		//this.put("distancewon", distanceWon);
 	}
 
 	@Column(name = "distance_behind_winner")
@@ -238,7 +234,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setDistanceBehindWinner(int distanceBehindWinner) {
 		this.distanceBehindWinner = distanceBehindWinner;
-		this.put("distancebehindwinner", distanceBehindWinner);
+		//this.put("distancebehindwinner", distanceBehindWinner);
 	}
 
 	@Column(name = "num_runners")
@@ -248,7 +244,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setNumRunners(int numRunners) {
 		this.numRunners = numRunners;
-		this.put("numrunners", numRunners);
+		//this.put("numrunners", numRunners);
 	}
 
 	@Column(name = "distance_yards")
@@ -258,7 +254,7 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setDistanceYards(int distanceYards) {
 		this.distanceYards = distanceYards;
-		this.put("distanceyards", distanceYards);
+		//this.put("distanceyards", distanceYards);
 	}
 
 	@Column(name = "in_race_comment")
@@ -268,8 +264,8 @@ public class FormEntry extends ParseObject implements Serializable {
 
 	public void setInRaceComment(String inRaceComment) {
 		this.inRaceComment = inRaceComment;
-		if (inRaceComment != null) {
+		/*if (inRaceComment != null) {
 			this.put("inracecomment", inRaceComment);
-		}
+		}*/
 	}
 }
