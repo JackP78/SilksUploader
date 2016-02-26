@@ -23,6 +23,7 @@ public class Runner implements Serializable {
 
 	private Race race;
 	private String trainerName;
+	private Integer clothNumber;
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -201,12 +202,12 @@ public class Runner implements Serializable {
 	
 	@Column(name = "cloth_number", nullable = true, length = 11)
 	public Integer getClothNumber() {
-		return officialRating;
+		return clothNumber;
 		//return new Integer(this.getInt("clothnumber"));
 	}
 
-	public void setClothNumber(Integer stallNumber) {
-		this.officialRating = officialRating;
+	public void setClothNumber(Integer clothNumber) {
+		this.clothNumber = clothNumber;
 		/*if (stallNumber != null) {
 			this.put("clothnumber", stallNumber.intValue());
 		}*/

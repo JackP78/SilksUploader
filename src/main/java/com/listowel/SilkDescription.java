@@ -195,148 +195,153 @@ public class SilkDescription {
 	}
 	
 	public void loadFromDescription(String description) {
-		this.logger.info(description);
-		
-		// need to do some basic replacements
-		description = description.replace(" slvs ", " sleeves ");
-		
-		List<String> tokens = new ArrayList();
-		StringTokenizer tokenizer = new StringTokenizer(description, " ,&",
-				false);
-		String nextToken = "";
-		while (tokenizer.hasMoreTokens()) {
-			String lastToken = nextToken;
-			nextToken = tokenizer.nextToken();
-			if (keywords.contains(lastToken + "_" + nextToken)) {
-				tokens.add(lastToken + "_" + nextToken);
-			} else if (keywords.contains(nextToken)) {
-				tokens.add(nextToken);
+		try {
+			this.logger.info(description);
+			
+			// need to do some basic replacements
+			description = description.replace(" slvs ", " sleeves ");
+			
+			List<String> tokens = new ArrayList();
+			StringTokenizer tokenizer = new StringTokenizer(description, " ,&",
+					false);
+			String nextToken = "";
+			while (tokenizer.hasMoreTokens()) {
+				String lastToken = nextToken;
+				nextToken = tokenizer.nextToken();
+				if (keywords.contains(lastToken + "_" + nextToken)) {
+					tokens.add(lastToken + "_" + nextToken);
+				} else if (keywords.contains(nextToken)) {
+					tokens.add(nextToken);
+				}
 			}
-		}
 
-		body = new SilksDescriptionElement();
-		// pop off the first word as the jacket colour
-		body.setColour(tokens.remove(0));
-		// search for the body pattern
-		int bodyLimit = (tokens.indexOf("sleeves") > 0) ? tokens
-				.indexOf("sleeves") : ((tokens.indexOf("cap") > 0) ? tokens
-				.indexOf("cap") : tokens.size());
-		// look for the body pattern
-		for (int patternIndex = 0; patternIndex < bodyLimit; patternIndex++) {
-			String token = tokens.get(patternIndex);
-			if (isBodyPattern(token)) {
-				// special logic for large spots
-				if (description.contains("large")) {
-					body.setPattern("large_spots");
-				}
-				else {
-					body.setPattern(token);
-				}
-				tokens.remove(patternIndex);
-				break;
-			}
-		}
-		// if we have a body pattern then we must have a pattern colour
-		if (!body.getPattern().equals("plain")) {
-			int index = 0;
-			for (String token : tokens) {
-				if (isColour(token)) {
-					body.setPatternColour(token);
-					tokens.remove(index);
-					break;
-				}
-				index++;
-			}
-		}
-		// look for the sleeve pattern
-		sleeve = new SilksDescriptionElement();
-		if (tokens.contains("sleeves")) {
-			int sleeveIndex = tokens.indexOf("sleeves");
-			// look for the pattern
-			for (int i = sleeveIndex - 1; i >= 0; i--) {
-				String token = tokens.get(i);
-				if (isSleevePattern(token)) {
-					sleeve.setPattern(token);
-					tokens.remove(i);
-					break;
-				}
-			}
-			// look for the colours
-			for (int i = sleeveIndex - 1; i >= 0; i--) {
-				String token = tokens.get(i);
-				if (isColour(token)) {
-					if (sleeve.getPattern().equals("plain")) {
-						sleeve.setColour(token);
-					} else if (sleeve.getPatternColour() == null) {
-						sleeve.setPatternColour(token);
-					} else {
-						sleeve.setColour(token);
+			body = new SilksDescriptionElement();
+			// pop off the first word as the jacket colour
+			body.setColour(tokens.remove(0));
+			// search for the body pattern
+			int bodyLimit = (tokens.indexOf("sleeves") > 0) ? tokens
+					.indexOf("sleeves") : ((tokens.indexOf("cap") > 0) ? tokens
+					.indexOf("cap") : tokens.size());
+			// look for the body pattern
+			for (int patternIndex = 0; patternIndex < bodyLimit; patternIndex++) {
+				String token = tokens.get(patternIndex);
+				if (isBodyPattern(token)) {
+					// special logic for large spots
+					if (description.contains("large")) {
+						body.setPattern("large_spots");
 					}
-					tokens.remove(i);
-				}
-			}
-		}
-		else {
-			for (String token : tokens) {
-				if (isSleevePattern(token) && !isCapPattern(token)) {
-					sleeve.setPattern(token);
-				}
-			}
-			// if no sleeves are specified and the body pattern is also applicable to the sleeve
-			if (sleeve.getPattern().equals("plain") && isSleevePattern(body.getPattern())) {
-				sleeve.setPattern(body.getPattern());
-			}
-		}
-		if (description.contains("& sleeves") && !body.getPattern().equals("plain") && sleeve.getPattern().equals("plain")) {
-			sleeve.setColour(body.getPatternColour());
-		}
-		sleeve.copyFrom(body);
-		
-		// look for the sleeve pattern
-		if (tokens.contains("cap")) {
-			cap = new SilksDescriptionElement();
-			int capIndex = tokens.size();
-			// look for the pattern
-			for (String token : tokens) {
-				if (isCapPattern(token)) {
-					cap.setPattern(token);
+					else {
+						body.setPattern(token);
+					}
+					tokens.remove(patternIndex);
 					break;
 				}
 			}
-			// look for the colours
-			capIndex = tokens.size();
-			for (int i = 0; i < capIndex; i++) {
-				String token = tokens.get(i);
-				if (isColour(token)) {
-					if (cap.getPattern().equals("plain")) {
-						cap.setColour(token);
-					} else if (cap.getPatternColour() == null) {
-						cap.setPatternColour(token);
-					} else {
-						cap.setColour(token);
+			// if we have a body pattern then we must have a pattern colour
+			if (!body.getPattern().equals("plain")) {
+				int index = 0;
+				for (String token : tokens) {
+					if (isColour(token)) {
+						body.setPatternColour(token);
+						tokens.remove(index);
+						break;
+					}
+					index++;
+				}
+			}
+			// look for the sleeve pattern
+			sleeve = new SilksDescriptionElement();
+			if (tokens.contains("sleeves")) {
+				int sleeveIndex = tokens.indexOf("sleeves");
+				// look for the pattern
+				for (int i = sleeveIndex - 1; i >= 0; i--) {
+					String token = tokens.get(i);
+					if (isSleevePattern(token)) {
+						sleeve.setPattern(token);
+						tokens.remove(i);
+						break;
 					}
 				}
-			}
-			cap.copyFrom(body);
-		}
-		if (cap == null) {
-			cap = new SilksDescriptionElement();
-			cap.setColour("white");
-		}
-		if (description.contains("& cap")) {
-			if (isCapPattern(sleeve.getPattern())) {
-				cap.setPattern(sleeve.getPattern());
-			}
-			if (description.contains("sleeve")) {
-				cap.copyFrom(sleeve);
+				// look for the colours
+				for (int i = sleeveIndex - 1; i >= 0; i--) {
+					String token = tokens.get(i);
+					if (isColour(token)) {
+						if (sleeve.getPattern().equals("plain")) {
+							sleeve.setColour(token);
+						} else if (sleeve.getPatternColour() == null) {
+							sleeve.setPatternColour(token);
+						} else {
+							sleeve.setColour(token);
+						}
+						tokens.remove(i);
+					}
+				}
 			}
 			else {
+				for (String token : tokens) {
+					if (isSleevePattern(token) && !isCapPattern(token)) {
+						sleeve.setPattern(token);
+					}
+				}
+				// if no sleeves are specified and the body pattern is also applicable to the sleeve
+				if (sleeve.getPattern().equals("plain") && isSleevePattern(body.getPattern())) {
+					sleeve.setPattern(body.getPattern());
+				}
+			}
+			if (description.contains("& sleeves") && !body.getPattern().equals("plain") && sleeve.getPattern().equals("plain")) {
+				sleeve.setColour(body.getPatternColour());
+			}
+			sleeve.copyFrom(body);
+			
+			// look for the sleeve pattern
+			if (tokens.contains("cap")) {
+				cap = new SilksDescriptionElement();
+				int capIndex = tokens.size();
+				// look for the pattern
+				for (String token : tokens) {
+					if (isCapPattern(token)) {
+						cap.setPattern(token);
+						break;
+					}
+				}
+				// look for the colours
+				capIndex = tokens.size();
+				for (int i = 0; i < capIndex; i++) {
+					String token = tokens.get(i);
+					if (isColour(token)) {
+						if (cap.getPattern().equals("plain")) {
+							cap.setColour(token);
+						} else if (cap.getPatternColour() == null) {
+							cap.setPatternColour(token);
+						} else {
+							cap.setColour(token);
+						}
+					}
+				}
 				cap.copyFrom(body);
 			}
+			if (cap == null) {
+				cap = new SilksDescriptionElement();
+				cap.setColour("white");
+			}
+			if (description.contains("& cap")) {
+				if (isCapPattern(sleeve.getPattern())) {
+					cap.setPattern(sleeve.getPattern());
+				}
+				if (description.contains("sleeve")) {
+					cap.copyFrom(sleeve);
+				}
+				else {
+					cap.copyFrom(body);
+				}
+			}
+			
+			
+			this.logger.info(this.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.log(Level.SEVERE, description, e);
 		}
-		
-		
-		this.logger.info(this.toString());
 	}
 
 	@XmlElement(name = "body")

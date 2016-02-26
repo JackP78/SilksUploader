@@ -58,7 +58,8 @@ public class FormEntry implements Serializable {
 					+ "where runner.runner_id=? "
 					+ "and race.meeting_date<? "
 					+ "and winner.finish_position=1 "
-					+ "order by meeting_date desc";
+					+ "order by meeting_date desc"
+					+ "limit 15";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, runner.getRunnerId());
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
