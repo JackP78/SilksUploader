@@ -395,10 +395,11 @@ public class SilkDescription {
 		URL url = cl.getResource(systemID);
 		Source source = new StreamSource(in);
 		source.setSystemId(url.toExternalForm()); 
-		Transformer transformer = factory.newTransformer(source); StreamSource xmlSource = new
-		StreamSource(xmlFile);
-		StreamResult out = new StreamResult(svgFile);
-		transformer.transform(xmlSource, out);
+		Transformer transformer = factory.newTransformer(source); 
+		StreamSource xmlSource = new StreamSource(xmlFile);
+		FileOutputStream stream = new FileOutputStream(svgFile);
+		StreamResult result = new StreamResult(stream);
+		transformer.transform(xmlSource, result);
 		xmlFile.delete();
 		
 		// this bit converts the svg to png and uploads to parse Transcoder

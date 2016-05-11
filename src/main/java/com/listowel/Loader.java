@@ -1,53 +1,25 @@
 package com.listowel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.PrintWriter;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
-import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.PNGTranscoder;
-/*import org.parse4j.Parse;
-import org.parse4j.ParseException;
-import org.parse4j.ParseFile;
-import org.parse4j.ParseObject;
-import org.parse4j.util.ParseRegistry;*/
 
-
-
-
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.json.JSONArray;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import java.sql.*;
 import java.text.SimpleDateFormat;
 
 public class Loader {
@@ -58,6 +30,9 @@ public class Loader {
 	// Database credentials
 	static final String USER = "root";
 	static final String PASS = "B@llybunion95";
+	
+	static final SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss.SSS");
+	
 
 	public static void main(String[] argv) throws TranscoderException,
 			IOException, JAXBException, TransformerException, Exception {
@@ -76,15 +51,11 @@ public class Loader {
 		final CountDownLatch done = new CountDownLatch(1);
 		
 		
-		String directory = System.getProperty("user.home")
-				+ "/Documents/SilksBin/";
-		
 		List<Race> list = query.list();
 		int raceNumber = 0;
 		String lastDayId = "", currentDayId;
 		Firebase currentDayRef = null, currentRaceRef;
 		SimpleDateFormat dt1 = new SimpleDateFormat("ddEEE");
-		SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss.SSS");
 		for (Race race : list) {
 			currentDayId = dt1.format(race.getMeetingDate());
 			if (!lastDayId.equals(currentDayId)) {
@@ -136,12 +107,18 @@ public class Loader {
 		String directory = System.getProperty("user.home")
 				+ "/Documents/SilksBin/";
 		
+		File theDir = new File(directory);
+		// create the directory if it does not exist
+		if (!theDir.exists()) {
+			theDir.mkdir();
+		}
+		
 		String fileName = String.format("%d_%d_%s", raceNumber,
 				runner.getClothNumber(),
 				runner.getName().replaceAll("[^A-Za-z]", ""));
 		//System.out.format("Creating Silks file %s;", fileName);
-		File svgFile = new File(directory + fileName + ".svg");
-		File pngFile = new File(directory + fileName + ".png");
+		File svgFile = new File(theDir, fileName + ".svg");
+		File pngFile = new File(theDir, fileName + ".png");
 		String description = runner.getJockeyColours().toLowerCase();
 		SilkDescription test = new SilkDescription();
 		test.loadFromDescription(description);

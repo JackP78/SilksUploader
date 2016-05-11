@@ -42,10 +42,12 @@
 			<version>2.7.1</version>
 		</dependency>
 		<!-- Batik transcoder for creating the PNG file -->
+		<!--<dependency> <groupId>batik</groupId> <artifactId>batik-1.5-fop</artifactId> 
+			<version>0.20-5</version> </dependency> -->
 		<dependency>
 			<groupId>batik</groupId>
-			<artifactId>batik-1.5-fop</artifactId>
-			<version>0.20-5</version>
+			<artifactId>batik-transcoder</artifactId>
+			<version>1.6-1</version>
 		</dependency>
 		<!-- MySQL database driver -->
 		<dependency>

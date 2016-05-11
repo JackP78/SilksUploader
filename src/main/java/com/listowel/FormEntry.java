@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FormEntry implements Serializable {
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://localhost/smartform";
@@ -127,15 +133,24 @@ public class FormEntry implements Serializable {
 		return resultArray;
 	}// end main
 
+	@JsonIgnore
 	@Column(name = "meeting_date")
 	public Date getMeetingDate() {
 		return meetingDate;
 	}
-
+	
 	public void setMeetingDate(Date meetingDate) {
 		this.meetingDate = meetingDate;
 		//this.put("meetingdate", meetingDate);
 	}
+	
+	@JsonProperty("meetingDate")
+	@Transient
+	public String getMeetingDateString() {
+		return (meetingDate != null)? dateFormat.format(meetingDate): null;
+	}
+
+	
 
 	@Column(name = "course")
 	public String getCourse() {
