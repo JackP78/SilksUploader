@@ -39,14 +39,17 @@ public class Loader {
 		boolean loadForm = false, loadSilks = true;
 		
 		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		// select the races for Listowel
 		Query query = session
 				.createQuery("from Race where courseName = :name and year(meetingDate) = :year and month(meetingDate) = :month order by meetingDate, scheduledTime");
-		query.setParameter("name", "Listowel");
-		query.setParameter("year", 2014);
-		query.setParameter("month", 9);
+		query.setParameter("name", "Listowel");  // course
+		query.setParameter("year", 2014);  // year
+		query.setParameter("month", 9);  // moneth
 
 		Firebase raceRef = new Firebase("https://listowelraces.firebaseio.com/races");
 		Firebase formRef = new Firebase("https://listowelraces.firebaseio.com/form");
+		String silksRef = "https://s3-eu-west-1.amazonaws.com/listowelracesbucket";
 				
 		final CountDownLatch done = new CountDownLatch(1);
 		
@@ -55,7 +58,7 @@ public class Loader {
 		int raceNumber = 0;
 		String lastDayId = "", currentDayId;
 		Firebase currentDayRef = null, currentRaceRef;
-		SimpleDateFormat dt1 = new SimpleDateFormat("ddEEE");
+		SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
 		for (Race race : list) {
 			currentDayId = dt1.format(race.getMeetingDate());
 			if (!lastDayId.equals(currentDayId)) {
@@ -64,20 +67,21 @@ public class Loader {
 				raceNumber = 1;
 				lastDayId = currentDayId;
 			}
+			race.setRaceNumber(raceNumber++);  // set the race index
 			System.out.format("Begin race %d day %s %s%n",raceNumber,currentDayRef,currentTime.format(new Date()));
-			int runnerNumber = 1;
 			for (Runner runner : race.getRunners()) {
 				if (loadSilks) {
 					AWSImageUploader loader = new AWSImageUploader("listowelracesbucket");
-					runner.setSilksUrl(loader.uploadFile(createSilksImage(runnerNumber, runner)));
+					runner.setSilksUrl(loader.uploadFile(createSilksImage(race, runner)));
 				}
-				
-				// first lets create the silk for each runner
-				//File pngFile = createSilksImage(raceNumber, runner);
+				else {
+					String fileName = getSilksFileName(race, runner);
+					runner.setSilksUrl(silksRef + "/" + fileName + ".png");
+				}
 				
 				// now lets load the runners form
 				if (loadForm) {
-					System.out.format("Begin Form runner %d race %d day %s %s%n",runnerNumber++,raceNumber,currentDayRef,currentTime.format(new Date()));
+					System.out.format("Begin Form runner %d race %d day %s %s%n",runner.getClothNumber(),race.getRaceNumber(),currentDayRef,currentTime.format(new Date()));
 					List<FormEntry> formList = FormEntry.loadRunnerForm(runner);
 					Firebase newFormRef = formRef.child(Integer.toString(runner.getRunnerId()));
 					newFormRef.setValue(formList, new Firebase.CompletionListener() {
@@ -89,7 +93,7 @@ public class Loader {
 					});
 				}
 			}
-			currentRaceRef = currentDayRef.child(Integer.toString(raceNumber++));
+			currentRaceRef = currentDayRef.child(Integer.toString(race.getRaceNumber()));
 			currentRaceRef.setValue(race, new Firebase.CompletionListener() {
 			    @Override
 			    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
@@ -102,7 +106,13 @@ public class Loader {
 		System.out.println("!!!!!All Done!!!!");
 	}
 
-	private static File createSilksImage(int raceNumber, Runner runner) throws JAXBException, TransformerException,
+	private static String getSilksFileName(Race race, Runner runner) {
+		return String.format("%d_%d_%s", race.getRaceNumber(),
+				runner.getClothNumber(),
+				runner.getName().replaceAll("[^A-Za-z]", ""));
+	}
+	
+	private static File createSilksImage(Race race, Runner runner) throws JAXBException, TransformerException,
 			IOException, TranscoderException {
 		String directory = System.getProperty("user.home")
 				+ "/Documents/SilksBin/";
@@ -113,9 +123,7 @@ public class Loader {
 			theDir.mkdir();
 		}
 		
-		String fileName = String.format("%d_%d_%s", raceNumber,
-				runner.getClothNumber(),
-				runner.getName().replaceAll("[^A-Za-z]", ""));
+		String fileName = getSilksFileName(race, runner);
 		//System.out.format("Creating Silks file %s;", fileName);
 		File svgFile = new File(theDir, fileName + ".svg");
 		File pngFile = new File(theDir, fileName + ".png");

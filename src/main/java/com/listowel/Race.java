@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -33,6 +34,15 @@ public class Race implements Serializable  {
 	private String courseName;
 	private Set<Runner> runners;
 	private Date scheduledDate;
+	private int raceNumber;
+	
+	@Transient
+	public int getRaceNumber() {
+		return raceNumber;
+	}
+	public void setRaceNumber(int raceNumber) {
+		this.raceNumber = raceNumber;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -128,7 +138,8 @@ public class Race implements Serializable  {
 		this.runners = runners;
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "race")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "race", targetEntity = Runner.class)
+	//@OrderBy("clothnumber")
 	public Set<Runner> getRunners() {
 		return this.runners;
 	}
